@@ -1,0 +1,14 @@
+.root {
+    -fx-font-size: 24px;
+}
+
+/* MainPane */
+
+.hello-box {
+    -fx-font-weight: bolder;
+}
+
+.world-box {
+    -fx-font-size: 40;
+    -fx-text-fill: red;
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import fr.univ.amu.sin4u05.igl.transit.ui.MainPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<fx:root xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         type="fr.univ.amu.sin4u05.igl.transit.ui.MainPane">
+
+    <SplitPane fx:id="splitPane" VBox.vgrow="ALWAYS" maxHeight="Infinity">
+        <HBox>
+            <Label fx:id="helloBox" styleClass="hello-box"/>
+        </HBox>
+        <HBox>
+            <Label fx:id="worldBox" styleClass="world-box"/>
+        </HBox>
+    </SplitPane>
+</fx:root>

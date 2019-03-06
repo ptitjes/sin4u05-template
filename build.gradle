@@ -1,0 +1,66 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.7'
+}
+
+version = '1.0.0'
+sourceCompatibility = 11
+targetCompatibility = 11
+
+sourceSets {
+    main {
+        java {
+            srcDirs = [
+                    'app/backend/src/main/java',
+                    'app/core/src/main/java',
+                    'app/frontend/src/main/java',
+            ]
+        }
+        resources {
+            srcDirs = [
+                    "app/frontend/src/main/resources",
+            ]
+        }
+    }
+
+    test {
+        java {
+            srcDirs = [
+                    'app/backend/src/test/java',
+                    'app/core/src/test/java',
+                    'app/frontend/src/test/java',
+            ]
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+javafx {
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web']
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile "com.github.penemue:keap:0.3.0"
+
+    testCompile "org.junit.jupiter:junit-jupiter-api:5.4.0"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:5.4.0"
+}
+
+application {
+    mainClassName = 'fr.univ.amu.sin4u05.igl.transit.ui.Main'
+}
+
+javadoc {
+    options.with {
+        links 'https://docs.oracle.com/en/java/javase/11/docs/api/'
+    }
+}
