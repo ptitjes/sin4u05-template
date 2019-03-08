@@ -2,6 +2,8 @@ package fr.univ.amu.sin4u05.igl.routes;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * An individual route step between two neighbor stations, as computed by {@link RouteSearch}.
@@ -14,16 +16,19 @@ public abstract class RouteStep {
     private final StationStop arrivalStop;
     private final LocalDateTime departureTime;
     private final LocalDateTime arrivalTime;
+    private final List<RouteStep> stepDetails;
 
     RouteStep(RouteStepType type,
               StationStop departureStop, StationStop arrivalStop,
-              LocalDateTime departureTime, LocalDateTime arrivalTime) {
+              LocalDateTime departureTime, LocalDateTime arrivalTime,
+              List<RouteStep> stepDetails) {
 
         this.type = type;
         this.departureStop = departureStop;
         this.arrivalStop = arrivalStop;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
+        this.stepDetails = stepDetails;
     }
 
     /**
@@ -79,6 +84,15 @@ public abstract class RouteStep {
      */
     public Duration getDuration() {
         return Duration.between(getDepartureTime(), getArrivalTime());
+    }
+
+    /**
+     * Returns the details of this route step.
+     *
+     * @return the list of detailed steps of this step.
+     */
+    public List<RouteStep> getStepDetails() {
+        return stepDetails != null ? stepDetails : Collections.singletonList(this);
     }
 
     protected abstract boolean canMerge(RouteStep other);

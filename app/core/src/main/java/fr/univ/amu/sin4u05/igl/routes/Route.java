@@ -84,7 +84,7 @@ public class Route {
      *
      * @return the compressed view of the route.
      */
-    public Route compressView() {
+    public Route compressRoute() {
         List<RouteStep> compressedSteps = new ArrayList<>();
 
         RouteStep lastStep = null;

@@ -1,6 +1,8 @@
 package fr.univ.amu.sin4u05.igl.routes;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A connection route step is a route step that must be travelled by walking.
@@ -21,8 +23,25 @@ public class ConnectionStep extends RouteStep {
     public ConnectionStep(double distance,
                           StationStop departureStop, StationStop arrivalStop,
                           LocalDateTime departureTime, LocalDateTime arrivalTime) {
+        this(distance, departureStop, arrivalStop, departureTime, arrivalTime, null);
+    }
 
-        super(RouteStepType.Connection, departureStop, arrivalStop, departureTime, arrivalTime);
+    /**
+     * Constructs a new {@code ConnectionStep} with the specified characteristics.
+     *
+     * @param distance      the distance to travel.
+     * @param departureStop the departure stop.
+     * @param arrivalStop   the arrival stop.
+     * @param departureTime the departure time.
+     * @param arrivalTime   the arrival time.
+     * @param stepDetails   the list of detailed steps of this step.
+     */
+    public ConnectionStep(double distance,
+                          StationStop departureStop, StationStop arrivalStop,
+                          LocalDateTime departureTime, LocalDateTime arrivalTime,
+                          List<RouteStep> stepDetails) {
+
+        super(RouteStepType.Connection, departureStop, arrivalStop, departureTime, arrivalTime, stepDetails);
         this.distance = distance;
     }
 
@@ -43,9 +62,15 @@ public class ConnectionStep extends RouteStep {
     @Override
     protected RouteStep merge(RouteStep other) {
         ConnectionStep that = (ConnectionStep) other;
+
+        List<RouteStep> stepDetails = new ArrayList<>();
+        stepDetails.addAll(getStepDetails());
+        stepDetails.addAll(that.getStepDetails());
+
         return new ConnectionStep(this.distance + that.distance,
                 getDepartureStop(), that.getArrivalStop(),
-                getDepartureTime(), that.getArrivalTime());
+                getDepartureTime(), that.getArrivalTime(),
+                stepDetails);
     }
 
     /**
