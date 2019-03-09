@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A route from one station to another station, as computed by {@link RouteSearch}.
@@ -20,7 +21,7 @@ public class Route {
      * @param steps the list of route steps.
      */
     public Route(List<RouteStep> steps) {
-        assert !steps.isEmpty();
+        assert steps != null && !steps.isEmpty();
         this.steps = Collections.unmodifiableList(steps);
     }
 
@@ -99,6 +100,31 @@ public class Route {
         if (lastStep != null) compressedSteps.add(lastStep);
 
         return new Route(compressedSteps);
+    }
+
+    /**
+     * Compares this route to the specified object. The result is {@code true} if and only if the argument is not
+     * {@code null} and is a {@code Route} object with the same steps.
+     *
+     * @param o the object to compare this {@code Route} against.
+     * @return {@code true} if the objects are the same; {@code false} otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Route route = (Route) o;
+        return steps.equals(route.steps);
+    }
+
+    /**
+     * Returns a hash code for this route. The hash code of a route is the hash code of its steps.
+     *
+     * @return a hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(steps);
     }
 
     /**

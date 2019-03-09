@@ -3,6 +3,7 @@ package fr.univ.amu.sin4u05.igl.routes;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A transport route step is a route step that must be travelled on a transport line.
@@ -89,6 +90,34 @@ public class TransportStep extends RouteStep {
                 getDepartureStop(), that.getArrivalStop(),
                 getDepartureTime(), that.getArrivalTime(),
                 stepDetails);
+    }
+
+    /**
+     * Compares this transport step to the specified object. The result is {@code true} if and only if the argument is
+     * not {@code null} and is a {@code TransportStep} object with the same transport line and head sign.
+     *
+     * @param o the object to compare this {@code TransportStep} against.
+     * @return {@code true} if the objects are the same; {@code false} otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        TransportStep that = (TransportStep) o;
+        return line.equals(that.line) &&
+                headSign.equals(that.headSign);
+    }
+
+    /**
+     * Returns a hash code for this transport step. The hash code of a transport step is the hash code of its
+     * superclass, line and head sign.
+     *
+     * @return a hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), line, headSign);
     }
 
     /**

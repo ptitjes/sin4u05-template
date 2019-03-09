@@ -3,6 +3,7 @@ package fr.univ.amu.sin4u05.igl.routes;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A connection route step is a route step that must be travelled by walking.
@@ -71,6 +72,33 @@ public class ConnectionStep extends RouteStep {
                 getDepartureStop(), that.getArrivalStop(),
                 getDepartureTime(), that.getArrivalTime(),
                 stepDetails);
+    }
+
+    /**
+     * Compares this connection step to the specified object. The result is {@code true} if and only if the argument is
+     * not {@code null} and is a {@code ConnectionStep} object with the same distance.
+     *
+     * @param o the object to compare this {@code ConnectionStep} against.
+     * @return {@code true} if the objects are the same; {@code false} otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        ConnectionStep that = (ConnectionStep) o;
+        return Double.compare(that.distance, distance) == 0;
+    }
+
+    /**
+     * Returns a hash code for this connection step. The hash code of a connection step is the hash code of its
+     * superclass and distance.
+     *
+     * @return a hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), distance);
     }
 
     /**
