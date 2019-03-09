@@ -3,7 +3,9 @@ package fr.univ.amu.sin4u05.igl.search;
 import com.github.penemue.keap.PriorityQueue;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 import java.util.function.Consumer;
 
 class SearchEngine<N, E, S> {
@@ -38,7 +40,6 @@ class SearchEngine<N, E, S> {
         if (STATISTICS > 0) statistics = new Statistics();
 
         Set<N> visitedNodes = new HashSet<>();
-        Map<N, SearchNode> nodeMap = new HashMap<>();
         PriorityQueue<SearchNode> queue = new PriorityQueue<>();
 
         SearchNode start = new SearchNode(startNode, driver.estimateCostToGoal(startNode, startState));
@@ -74,12 +75,11 @@ class SearchEngine<N, E, S> {
 
                     boolean visited = visitedNodes.contains(targetNode);
 
-                    SearchNode target = nodeMap.computeIfAbsent(targetNode, n -> {
-                        if (STATISTICS > 0) statistics.nodeCount++;
-                        return new SearchNode(n, driver.estimateCostToGoal(n, targetState));
-                    });
+                    SearchNode target = new SearchNode(targetNode, driver.estimateCostToGoal(targetNode, targetState));
 
-                    target.addBackPointer(new BackPointer(current, edge, targetState, target));
+                    if (STATISTICS > 0) statistics.nodeCount++;
+
+                    target.setBackPointer(new BackPointer(current, edge, targetState, target));
 
                     if (DEBUG > 1) {
                         System.out.println("  >> " + edge +
@@ -119,7 +119,7 @@ class SearchEngine<N, E, S> {
         private final N node;
         private final double coastToGoal;
 
-        private TreeSet<BackPointer> backPointers = new TreeSet<>();
+        private BackPointer backPointer;
 
         SearchNode(N node, double coastToGoal) {
             this.node = node;
@@ -135,19 +135,19 @@ class SearchEngine<N, E, S> {
         }
 
         double getCostFromStart() {
-            return backPointers.isEmpty() ? 0 : backPointers.first().getCostFromStart();
+            return backPointer == null ? 0 : backPointer.getCostFromStart();
         }
 
         S getState() {
-            return backPointers.isEmpty() ? startState : backPointers.first().targetState;
+            return backPointer == null ? startState : backPointer.targetState;
         }
 
         double getTotalCost() {
             return getCostFromStart() + coastToGoal;
         }
 
-        void addBackPointer(BackPointer backPointer) {
-            backPointers.add(backPointer);
+        void setBackPointer(BackPointer backPointer) {
+            this.backPointer = backPointer;
         }
 
         @Override
@@ -159,8 +159,8 @@ class SearchEngine<N, E, S> {
             LinkedList<E> path = new LinkedList<>();
 
             SearchNode searchNode = this;
-            while (!searchNode.backPointers.isEmpty()) {
-                BackPointer backPointer = searchNode.backPointers.first();
+            while (searchNode.backPointer != null) {
+                BackPointer backPointer = searchNode.backPointer;
                 path.addFirst(backPointer.edge);
 
                 searchNode = backPointer.parent;
